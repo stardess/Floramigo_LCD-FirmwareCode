@@ -12,6 +12,7 @@ idf_component_register(
                               "LVGL_UI/LVGL_Example.c"
                               "Wireless/Wireless.c"
                               "Buzzer/Buzzer.c"
+                              "Floramigo_Sensors/Floramigo_Sensors.c"
                               "BAT_Driver/BAT_Driver.c"
 
                         INCLUDE_DIRS "./EXIO"
@@ -24,6 +25,7 @@ idf_component_register(
                                      "./QMI8658"
                                      "./SD_Card"
                                      "./LVGL_UI"
+                                     "./Floramigo_Sensors"
                                      "./Wireless"
                                      "./Buzzer"
                                      "./BAT_Driver"

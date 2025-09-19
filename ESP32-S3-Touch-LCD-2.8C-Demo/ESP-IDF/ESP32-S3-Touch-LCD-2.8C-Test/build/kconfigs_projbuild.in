@@ -1,0 +1,6 @@
+source "/Users/stardess/esp/esp-idf/components/bootloader/Kconfig.projbuild"
+source "/Users/stardess/esp/esp-idf/components/esp_app_format/Kconfig.projbuild"
+source "/Users/stardess/esp/esp-idf/components/esp_rom/Kconfig.projbuild"
+source "/Users/stardess/esp/esp-idf/components/esptool_py/Kconfig.projbuild"
+source "/Users/stardess/esp/esp-idf/components/partition_table/Kconfig.projbuild"
+source "/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/main/Kconfig.projbuild"

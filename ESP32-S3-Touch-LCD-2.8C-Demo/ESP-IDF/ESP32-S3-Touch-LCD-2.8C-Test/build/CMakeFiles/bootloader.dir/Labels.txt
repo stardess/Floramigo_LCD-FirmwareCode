@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/CMakeFiles/bootloader
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/CMakeFiles/bootloader.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/CMakeFiles/bootloader-complete.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/Users/stardess/Desktop/Floramigo_LCD-FirmwareCode/ESP32-S3-Touch-LCD-2.8C-Demo/ESP-IDF/ESP32-S3-Touch-LCD-2.8C-Test/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

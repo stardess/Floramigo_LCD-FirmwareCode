@@ -13,6 +13,7 @@
 #include "LVGL_Example.h"
 #include "Wireless.h"
 #include "BAT_Driver.h"
+#include "Floramigo_Sensors.h"
 
 void Driver_Loop(void *parameter)
 {

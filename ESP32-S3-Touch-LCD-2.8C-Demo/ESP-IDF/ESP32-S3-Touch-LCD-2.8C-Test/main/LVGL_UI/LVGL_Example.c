@@ -1,5 +1,5 @@
 #include "LVGL_Example.h"
-
+#include "Floramigo_Sensors.h"
 
 /**********************
  *      TYPEDEFS
@@ -13,10 +13,12 @@ typedef enum {
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-static void Onboard_create(lv_obj_t * parent);
+// static void Onboard_create(lv_obj_t * parent);
+static void Floramigo_create(lv_obj_t * parent);
 
 static void ta_event_cb(lv_event_t * e);
 void example1_increase_lvgl_tick(lv_timer_t * t);
+void example2_increase_lvgl_tick(lv_timer_t * t);
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -43,6 +45,10 @@ lv_obj_t * Board_angle;
 lv_obj_t * RTC_Time;
 lv_obj_t * Wireless_Scan;
 lv_obj_t * Backlight_slider;
+lv_obj_t * Humidity_value;
+lv_obj_t * Temperature_value;
+lv_obj_t * Light_value;
+lv_obj_t * Soil_value;
 
 
 void Lvgl_Example1(void){
@@ -131,15 +137,17 @@ void Lvgl_Example1(void){
     lv_obj_align_to(label, logo, LV_ALIGN_OUT_RIGHT_BOTTOM, 10, 0);
   }
 
-  lv_obj_t * t1 = lv_tabview_add_tab(tv, "Onboard");
+  // lv_obj_t * t1 = lv_tabview_add_tab(tv, "Onboard");
   // lv_obj_t * t2 = lv_tabview_add_tab(tv, "Buzzer");
   // lv_obj_t * t3 = lv_tabview_add_tab(tv, "Shop");
+  lv_obj_t * t4 = lv_tabview_add_tab(tv, "Floramigo");
   
   // lv_coord_t screen_width = lv_obj_get_width(lv_scr_act());
   // lv_obj_set_width(t1, screen_width);
-  Onboard_create(t1);
+  // Onboard_create(t1);
   // Buzzer_create(t2);
   // shop_create(t3);
+  Floramigo_create(t4);
 
   // color_changer_create(tv);
 }
@@ -194,6 +202,136 @@ void Lvgl_Example1_close(void)
 /**********************
 *   STATIC FUNCTIONS
 **********************/
+
+static void Floramigo_create(lv_obj_t * parent)
+{
+
+  // sensors needed: humidity, temperature, light intensity, soil moisture
+  lv_obj_t * panel1 = lv_obj_create(parent);
+  lv_obj_set_height(panel1, LV_SIZE_CONTENT);
+
+  lv_obj_t * panel1_title = lv_label_create(panel1);
+  lv_label_set_text(panel1_title, "Floramigo sensors data");
+  lv_obj_add_style(panel1_title, &style_title, 0);
+
+  // Add your Floramigo UI elements here
+  // For example, you can create labels, buttons, sliders, etc.
+
+  // Example label
+  lv_obj_t * Humidity_label = lv_label_create(panel1);
+  lv_label_set_text(Humidity_label, "Humidity Percent (%)");
+  lv_obj_add_style(Humidity_label, &style_text_muted, 0);
+
+  Humidity_value = lv_textarea_create(panel1);
+  lv_textarea_set_one_line(Humidity_value, true);
+  lv_textarea_set_placeholder_text(Humidity_value, "0.0 %");
+  lv_obj_add_event_cb(Humidity_value, ta_event_cb, LV_EVENT_ALL, NULL);
+
+  lv_obj_t * Temperature_label = lv_label_create(panel1);
+  lv_label_set_text(Temperature_label, "Temperature (°C)");
+  lv_obj_add_style(Temperature_label, &style_text_muted, 0);
+
+  Temperature_value = lv_textarea_create(panel1);
+  lv_textarea_set_one_line(Temperature_value, true);
+  lv_textarea_set_placeholder_text(Temperature_value, "0.0 °C");
+  lv_obj_add_event_cb(Temperature_value, ta_event_cb, LV_EVENT_ALL, NULL);
+
+  lv_obj_t * Light_label = lv_label_create(panel1);
+  lv_label_set_text(Light_label, "Light Intensity");
+  lv_obj_add_style(Light_label, &style_text_muted, 0);
+
+  Light_value = lv_textarea_create(panel1);
+  lv_textarea_set_one_line(Light_value, true);
+  lv_textarea_set_placeholder_text(Light_value, "Unknown");
+  lv_obj_add_event_cb(Light_value, ta_event_cb, LV_EVENT_ALL, NULL);
+
+  lv_obj_t * Soil_label = lv_label_create(panel1);
+  lv_label_set_text(Soil_label, "Soil Moisture");
+  lv_obj_add_style(Soil_label, &style_text_muted, 0);
+
+  Soil_value = lv_textarea_create(panel1);
+  lv_textarea_set_one_line(Soil_value, true);
+  lv_textarea_set_placeholder_text(Soil_value, "Unknown");
+  lv_obj_add_event_cb(Soil_value, ta_event_cb, LV_EVENT_ALL, NULL);
+
+  lv_obj_t * Backlight_label = lv_label_create(panel1);
+  lv_label_set_text(Backlight_label, "Backlight brightness");
+  lv_obj_add_style(Backlight_label, &style_text_muted, 0);
+
+  Backlight_slider = lv_slider_create(panel1);                                 
+  lv_obj_add_flag(Backlight_slider, LV_OBJ_FLAG_CLICKABLE);    
+  lv_obj_set_size(Backlight_slider, 200, 35);              
+  lv_obj_set_style_radius(Backlight_slider, 3, LV_PART_KNOB);               // Adjust the value for more or less rounding                                            
+  lv_obj_set_style_bg_opa(Backlight_slider, LV_OPA_TRANSP, LV_PART_KNOB);                               
+  // lv_obj_set_style_pad_all(Backlight_slider, 0, LV_PART_KNOB);                                            
+  lv_obj_set_style_bg_color(Backlight_slider, lv_color_hex(0xAAAAAA), LV_PART_KNOB);               
+  lv_obj_set_style_bg_color(Backlight_slider, lv_color_hex(0xFFFFFF), LV_PART_INDICATOR);             
+  lv_obj_set_style_outline_width(Backlight_slider, 2, LV_PART_INDICATOR);  
+  lv_obj_set_style_outline_color(Backlight_slider, lv_color_hex(0xD3D3D3), LV_PART_INDICATOR);      
+  lv_slider_set_range(Backlight_slider, 5, Backlight_MAX);              
+  lv_slider_set_value(Backlight_slider, LCD_Backlight, LV_ANIM_ON);  
+  lv_obj_add_event_cb(Backlight_slider, Backlight_adjustment_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+
+
+  static lv_coord_t floramigo_main_cols[] = { LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+  static lv_coord_t floramigo_main_rows[] = { LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST };
+
+  // /*Create the top panel*/
+  // static lv_coord_t grid_1_row_dsc[] = {LV_GRID_FR(4),  LV_GRID_FR(1),  LV_GRID_FR(1),  LV_GRID_FR(1), LV_GRID_FR(4), LV_GRID_TEMPLATE_LAST};
+  // static lv_coord_t grid_1_row_dsc[] = {
+  //   LV_GRID_CONTENT, /*Name*/
+  //   LV_GRID_CONTENT, /*Description*/
+  //   LV_GRID_CONTENT, /*Email*/
+  //   LV_GRID_CONTENT, /*Email*/
+  //   LV_GRID_TEMPLATE_LAST
+  // };
+
+
+  static lv_coord_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(5), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+  static lv_coord_t grid_2_row_dsc[] = {
+    LV_GRID_CONTENT,  /*Title*/
+    5,                /*Separator*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_CONTENT,  /*Box title*/
+    40,               /*Box*/
+    LV_GRID_TEMPLATE_LAST
+  };
+
+  lv_obj_set_grid_dsc_array(parent, floramigo_main_cols, floramigo_main_rows);
+
+  lv_obj_set_grid_cell(panel1, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 0, 1);
+  lv_obj_set_grid_dsc_array(panel1, grid_2_col_dsc, grid_2_row_dsc);
+  lv_obj_set_grid_cell(panel1_title, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
+  lv_obj_set_grid_cell(Humidity_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 2, 1);
+  lv_obj_set_grid_cell(Humidity_value, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 3, 1);
+  lv_obj_set_grid_cell(Temperature_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 4, 1);
+  lv_obj_set_grid_cell(Temperature_value, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 5, 1);
+  lv_obj_set_grid_cell(Light_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 6, 1);
+  lv_obj_set_grid_cell(Light_value, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 7, 1);
+  lv_obj_set_grid_cell(Soil_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 8, 1);
+  lv_obj_set_grid_cell(Soil_value, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 9, 1);
+  // lv_obj_set_grid_cell(Time_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 10, 1);
+  // lv_obj_set_grid_cell(RTC_Time, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 11, 1);
+  // lv_obj_set_grid_cell(Wireless_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 12, 1);
+  // lv_obj_set_grid_cell(Wireless_Scan, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 13, 1);
+  lv_obj_set_grid_cell(Backlight_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 10, 1);
+  lv_obj_set_grid_cell(Backlight_slider, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 11, 1);
+
+  auto_step_timer = lv_timer_create(example2_increase_lvgl_tick, 100, NULL);
+}
 
 static void Onboard_create(lv_obj_t * parent)
 {
@@ -363,6 +501,27 @@ static void Onboard_create(lv_obj_t * parent)
 
   
   auto_step_timer = lv_timer_create(example1_increase_lvgl_tick, 100, NULL);
+}
+
+void example2_increase_lvgl_tick(lv_timer_t * t)
+{
+  char buf[100];
+
+  /* Humidity: e.g., "66.0 %\r\n" */
+  snprintf(buf, sizeof(buf), "%.1f %%\r\n", humidity_percent);
+  lv_textarea_set_placeholder_text(Humidity_value, buf);
+
+  /* Temperature: e.g., "30.2 °C\r\n" */
+  snprintf(buf, sizeof(buf), "%.1f °C\r\n", temp_c);
+  lv_textarea_set_placeholder_text(Temperature_value, buf);
+
+  /* Soil state: e.g., "Dry\r\n" */
+  snprintf(buf, sizeof(buf), "%s\r\n", soil_state);
+  lv_textarea_set_placeholder_text(Soil_value, buf);
+
+  /* Light level: e.g., "Dark\r\n" */
+  snprintf(buf, sizeof(buf), "%s\r\n", light_level);
+  lv_textarea_set_placeholder_text(Light_value, buf);
 }
 
 void example1_increase_lvgl_tick(lv_timer_t * t)
